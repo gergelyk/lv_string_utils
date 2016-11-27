@@ -9,7 +9,9 @@ Welcome to lv_string_utils's documentation!
 LabVIEW utilities for processing strings. Especially recommended to programmers who are familiar with Python.
 
 `Requirements <https://github.com/gergelyk/lv_string_utils>`_
+
 `Installation <https://github.com/gergelyk/lv_string_utils>`_
+
 `Source Code <https://github.com/gergelyk/lv_string_utils>`_
 
 This library includes following VIs:
