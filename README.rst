@@ -12,7 +12,7 @@ Requirements
 
 * OpenG String Library (available through VI Package Manager).
 * LabVIEW 2015 (downgrade to older versions potentially possible).
-* `lv_test_utils 1.0.0 <= version < 2.0.0 <https://github.com/gergelyk/lv_test_utils/>`_ (only for running unit tests).
+* `lv_test_utils <https://github.com/gergelyk/lv_test_utils/>`_ 1.0.0 <= version < 2.0.0 (only for running unit tests).
 
 Installation
 ------------
