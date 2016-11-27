@@ -17,9 +17,9 @@ Requirements
 Installation
 ------------
 
-1. Copy file "./src/LV String Utils v1" to "<LabVIEW>/<user.lib>/"
+1. Copy file ``./src/LV String Utils v1`` to ``<LabVIEW>/<user.lib>/``
 2. Restart LabVIEW
 3. LabVIEW -> Tools -> Advanced -> Edit Palette Set...
 4. Right click on palette -> Insert -> Subpalette -> Link to an existing palette
-5. navigate to "<LabVIEW>/<user.lib>/LV String Utils v1/string_utils.mnu
+5. navigate to `<LabVIEW>/<user.lib>/LV String Utils v1/string_utils.mnu`
 
