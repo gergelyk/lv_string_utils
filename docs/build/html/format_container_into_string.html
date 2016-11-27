@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Format Container Into String.vi &mdash; lv_string_utils 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="lv_string_utils 1.0 documentation" href="index.html" />
+    <link rel="next" title="Join Strings.vi" href="join_strings.html" />
+    <link rel="prev" title="Container To String.vi" href="container_to_string.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="join_strings.html" title="Join Strings.vi"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="container_to_string.html" title="Container To String.vi"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">lv_string_utils 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="format-container-into-string-vi">
+<h1>Format Container Into String.vi<a class="headerlink" href="#format-container-into-string-vi" title="Permalink to this headline">¶</a></h1>
+<img alt="_images/format_container_into_string.png" src="_images/format_container_into_string.png" />
+<p>Converts input data into a human-readable string according the the <cite>format string</cite>. Input data can be of any type, except for those few which are not supported by <a class="reference external" href="container_to_string.html">Container To String.vi</a>.</p>
+<dl class="docutils">
+<dt><strong>format string</strong> <em>(Input, String)</em></dt>
+<dd>Optional string that specifies how to create resulting string.</dd>
+<dt><strong>initial string</strong> <em>(Input, String)</em></dt>
+<dd>String to be prepended to the resulting string.</dd>
+<dt><strong>error in</strong> <em>(Input, Error Cluster)</em></dt>
+<dd>This input provides standard <a class="reference external" href="https://zone.ni.com/reference/en-XX/help/371361L-01/lvconcepts/using_standard_error_in/">error in</a> functionality.</dd>
+<dt><strong>input</strong> <em>(Input, Variant)</em></dt>
+<dd>Data to be formated into string.</dd>
+<dt><strong>resulting string</strong> <em>(Output, String)</em></dt>
+<dd>String representing input data, build based on format string.</dd>
+<dt><strong>error out</strong> <em>(Output, Error Cluster)</em></dt>
+<dd>This output provides standard <a class="reference external" href="http://zone.ni.com/reference/en-XX/help/371361N-01/lvconcepts/using_standard_error_out/">error out</a> functionality.</dd>
+</dl>
+<div class="section" id="theory-of-operation">
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this headline">¶</a></h2>
+<p>Following two types of formating are available:</p>
+<ul>
+<li><p class="first"><strong>Explicite</strong> - data item has corresponding placeholder which specifies how value is to be converted into string. This is available only for LabVIEW built-in scalar types. Standard placeholders like <code class="docutils literal"><span class="pre">%f</span></code>, <code class="docutils literal"><span class="pre">%d</span></code> etc can be used. For more information read <a class="reference external" href="http://zone.ni.com/reference/en-XX/help/371361J-01/lvconcepts/format_specifier_syntax/">here</a>.</p>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Implicite</strong> - available for all data types that are supported by <a class="reference external" href="container_to_string.html">Container To String.vi</a>. It can be achieved in two ways:</dt>
+<dd><ul class="first last simple">
+<li><strong>Default</strong> - by not providing <cite>format string</cite> at all. Data needs to be casted (manually or automatically) to <cite>Variant</cite> type and provided to the input of the VI. This will have the same effect as using <a class="reference external" href="container_to_string.html">Container To String.vi</a>.</li>
+<li><strong>Custom</strong> - by casting data to <cite>Variant</cite> twice and applying <code class="docutils literal"><span class="pre">%s</span></code> placeholder. The same formating as above will be used. However here, additional text can be prepended or appended.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Additional rules apply to the containers (arrays and clusters). Each element of the container is considered separately and formated either explicitely or implicitely. Multidimentional arrays are first converted to single dimention. Clusters cannot be linearized like this. They are processed element-wise, non-recursively.</p>
+<p>Number of elements and placeholders doesn&#8217;t have to be the same. If number of elements is greater than number of placeholders, the last elements will be discarded. If number of elements is smaller than number of placeholders, the last placeholders will be discarded.</p>
+</div>
+<div class="section" id="scalars">
+<h2>Scalars<a class="headerlink" href="#scalars" title="Permalink to this headline">¶</a></h2>
+<table cellpadding=6>
+  <tr>
+    <th style="width: 400px;">Code</th>
+    <th>Result</th>
+    <th>Comment</th>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/implicite_variant.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1.230000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite default formatting.</b><br>Built-in type, scalar. Data casted to <cite>Variant</cite> manually.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/implicite.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1.230000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite default formatting.</b><br>Built-in type, scalar. Data casted to <cite>Variant</cite> automatically.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/default.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1.230000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite custom formatting.</b><br>Built-in type, scalar. Note that data has ben casted to <cite>Variant</cite> twice.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/default_short.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1.230000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite custom formatting.</b><br>Built-in type, scalar. The same as above, but double casting has been performed by <a href="to_nested_variant.html">To Nested Variant.vi</a>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/custom.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">Value: 1.230000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Explicite formatting</b>.<br>Built-in type, scalar. Simple case.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/custom_adv.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">Value: 1.230</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Explicite formatting.</b><br>Built-in type, scalar. A bit more advanced than above.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/default_obj.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">LabVIEW Object</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite custom formatting.</b><br>Instance of the class.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/default_arr.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">[[1.000000, 2.000000, 3.000000], [6.000000, 7.000000, 8.000000]]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite default formatting.</b><br>Array.</td>
+  </tr>
+</table></div>
+<div class="section" id="special-cases">
+<h2>Special Cases<a class="headerlink" href="#special-cases" title="Permalink to this headline">¶</a></h2>
+<table cellpadding=6>
+  <tr>
+    <th style="width: 400px;">Code</th>
+    <th>Result</th>
+    <th>Comment</th>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/bool_native_dec.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">Natively, LabVIEW can convert boolean values as they were decimal...</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/bool_native_str.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">TRUE</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">...or as they were stirngs. This returns names of the values in upper case though.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/bool_native_def.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">True</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">If we want to be Python-compatible, we need CamelCase. This can be achieved by using <b>implicite custom formatting</b>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/enum_str.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">second</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">Enums can be converted by using names of the constants... <img src="_static/img/format/enum_values.png"></td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/enum_dec.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">...or by using values of the constants.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/enum_str_dec.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">Value of second is 1</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">The same constant is dispayed twice. Once as a name and then as a value.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/string.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">abc<br>def</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><code class="docutils literal"><span class="pre">s</span></code> placeholder is the one which natively goes together with string data type. This is why it returns input data as it is. This case can be clasified as <b>explicite formatting</b>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/string_variant.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">'abc\ndef'</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">If we want to be compatible wiht Python <code class="docutils literal"><span class="pre">repr</span></code> function, string data type needs to be provided in a variant. This results in <b>implicite custom formatting</b>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/variant.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;"><i>non-printable</i></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">In cases when we need <cite>Variant</cite> type to be flattened into string, triple casting is necessary.</td>
+  </tr>
+</table></div>
+<div class="section" id="containers">
+<h2>Containers<a class="headerlink" href="#containers" title="Permalink to this headline">¶</a></h2>
+<table cellpadding=6>
+  <tr>
+    <th style="width: 400px;">Code</th>
+    <th>Result</th>
+    <th>Comment</th>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_dec.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">[1, 2, 3]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite defaut formatting</b> of homogenous array.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_dec_form.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1..2..3..</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Element-wise explicite formatting</b> of homogenous array. Note that spare placeholders have been discarded.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_dec_var.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">Data is: [1, 2, 3]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite custom formatting</b> of homogenous array with a string preceding data.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_var_expl.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1; 123.000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Element-wise explicite formatting</b> of heterogeneous array. Note that each element has been manually casted to <cite>Variant</cite>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_var_impl.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1; 123.000</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">The same as above, but only the first element has been casted to <cite>Variant</cite> manually. Remaining elements can be casted automatically.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_nest.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">[True, 123.000000, 1, 2, 3]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Implicite defaut formatting</b> of heterogeneous array. Note that <code class="docutils literal"><span class="pre">Build Array</span></code> function concatenates inputs. Elements of input array are one by one casted to <cite>Variants</cite>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_nest_form.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1; 123.000; 1-2-3</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Element-wise explicite formatting</b> of heterogeneous array. Note that <code class="docutils literal"><span class="pre">Build Array</span></code> function concatenates inputs. Elements of input array are one by one casted to <cite>Variants</cite>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/arr_nest_var.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1; 123.000; [1, 2, 3]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;"><b>Element-wise mixed formatting</b> of heterogeneous array. Input array has been casted to <cite>Variants</cite> twice, which makes <code class="docutils literal"><span class="pre">Build Array</span></code> function consider it as a single element. First two elements of resulting array have been formated <b>explicitely</b>. The last element has been formated using <b>implicite custom formatting</b>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/clust_wrong.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;"><i>unspecified</i></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">In contrast to arrays which can be concatenated, clusters cannot be linearized. This means that clusters that contain other containers cannot be formatted element-wise...</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/clust.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1; 123.000; [1, 2, 3]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">...until containers are casted to <cite>Variant</cite> type for further <b>implicite custom formatting</b>.</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="_static/img/format/clust_const.png"></td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">1; 123.000; [1, 2, 3]</td>
+    <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">Naturally, the same data as above can be placed in code as a constant, without using <code class="docutils literal"><span class="pre">Bundle</span></code> function.</td>
+  </tr>
+</table></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Format Container Into String.vi</a><ul>
+<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a></li>
+<li><a class="reference internal" href="#scalars">Scalars</a></li>
+<li><a class="reference internal" href="#special-cases">Special Cases</a></li>
+<li><a class="reference internal" href="#containers">Containers</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="container_to_string.html"
+                        title="previous chapter">Container To String.vi</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="join_strings.html"
+                        title="next chapter">Join Strings.vi</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/format_container_into_string.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="join_strings.html" title="Join Strings.vi"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="container_to_string.html" title="Container To String.vi"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">lv_string_utils 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Grzegorz Krason.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

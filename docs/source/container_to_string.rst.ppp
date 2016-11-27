@@ -1,0 +1,68 @@
+Container To String.vi
+======================
+
+.. image:: _static/img/conthelp/container_to_string.png
+
+Recursively converts almost* anything to human-readable** string. Result is as much compatible with Python built-in repr_ function as possible. This means that in most of the cases, resulting string can be directly procesed by Python interpreter, to get an object which corresponds to the one which was passed as an input argument to the VI.
+
+Additionally, VI provides label assigned to the wire that provides data to the input.
+
+.. _repr: https://docs.python.org/2/library/functions.html#func-repr
+
+
+| [*] Following data types are not supported: numerical types with units.  
+| [**] Except for `Variant` type which is flattened to non-readable string.  
+
+**variant** *(Input, String)*
+  Data to be converted into string.
+
+**string** *(Output, String)*
+  String representing input data.
+
+**label** *(Output, String)*
+  Label assigned to the wire that provides data to the **variant** input.
+
+**error in** *(Input, Error Cluster)*
+  This input provides standard `error in <https://zone.ni.com/reference/en-XX/help/371361L-01/lvconcepts/using_standard_error_in/>`_ functionality.
+
+**error out** *(Output, Error Cluster)*
+  This output provides standard `error out <http://zone.ni.com/reference/en-XX/help/371361N-01/lvconcepts/using_standard_error_out/>`_ functionality.
+
+<!-- ###
+## import sys, os
+## sys.path.append(os.path.split(sys.argv[1])[0])
+## from content import cts_basic, cts_adv
+###-->
+
+<!-- ## def print_table(data):        #-->
+<!-- ## ROOT='_static/img/convert/'   #-->
+.. raw:: html
+
+    <table cellpadding=6>
+      <tr>
+        <th style="width: 310px;">Code</th>
+        <th>Result</th> 
+        <th>Comment</th>
+      </tr>
+<!-- ## for row in data:              #-->
+<!-- ## NAME,RESULT,DESCR = row       #-->
+      <tr>
+        <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="{ROOT}{NAME}.png"></td>
+        <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">{RESULT}</td> 
+        <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">{DESCR}</td>
+      </tr>
+<!--###-->
+    </table>
+<!--###-->
+
+
+Basic Usage
+-----------
+
+<!--## print_table(cts_basic) #-->
+
+Advanced Usage
+--------------
+
+<!--## print_table(cts_adv) #-->
+

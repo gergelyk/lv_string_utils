@@ -1,0 +1,82 @@
+Format Container Into String.vi
+===============================
+
+.. image:: _static/img/conthelp/format_container_into_string.png
+
+Converts input data into a human-readable string according the the `format string`. Input data can be of any type, except for those few which are not supported by `Container To String.vi <container_to_string.html>`_.
+
+**format string** *(Input, String)*
+  Optional string that specifies how to create resulting string.
+
+**initial string** *(Input, String)*
+  String to be prepended to the resulting string.
+
+**error in** *(Input, Error Cluster)*
+  This input provides standard `error in <https://zone.ni.com/reference/en-XX/help/371361L-01/lvconcepts/using_standard_error_in/>`_ functionality.
+
+**input** *(Input, Variant)*
+  Data to be formated into string.
+
+**resulting string** *(Output, String)*
+  String representing input data, build based on format string.
+
+**error out** *(Output, Error Cluster)*
+  This output provides standard `error out <http://zone.ni.com/reference/en-XX/help/371361N-01/lvconcepts/using_standard_error_out/>`_ functionality.
+
+Theory of Operation
+-------------------
+
+Following two types of formating are available:
+
+* **Explicite** - data item has corresponding placeholder which specifies how value is to be converted into string. This is available only for LabVIEW built-in scalar types. Standard placeholders like ``%f``, ``%d`` etc can be used. For more information read `here <http://zone.ni.com/reference/en-XX/help/371361J-01/lvconcepts/format_specifier_syntax/>`_.
+* **Implicite** - available for all data types that are supported by `Container To String.vi <container_to_string.html>`_. It can be achieved in two ways:
+    * **Default** - by not providing `format string` at all. Data needs to be casted (manually or automatically) to `Variant` type and provided to the input of the VI. This will have the same effect as using `Container To String.vi <container_to_string.html>`_.
+    * **Custom** - by casting data to `Variant` twice and applying ``%s`` placeholder. The same formating as above will be used. However here, additional text can be prepended or appended.
+
+Additional rules apply to the containers (arrays and clusters). Each element of the container is considered separately and formated either explicitely or implicitely. Multidimentional arrays are first converted to single dimention. Clusters cannot be linearized like this. They are processed element-wise, non-recursively.
+
+Number of elements and placeholders doesn't have to be the same. If number of elements is greater than number of placeholders, the last elements will be discarded. If number of elements is smaller than number of placeholders, the last placeholders will be discarded.
+
+<!-- ###
+## import sys, os
+## sys.path.append(os.path.split(sys.argv[1])[0])
+## from content import fc_basic, fc_cont, fc_special
+###-->
+
+<!-- ## def print_table(data):        #-->
+<!-- ## ROOT='_static/img/format/'   #-->
+.. raw:: html
+
+    <table cellpadding=6>
+      <tr>
+        <th style="width: 400px;">Code</th>
+        <th>Result</th> 
+        <th>Comment</th>
+      </tr>
+<!-- ## for row in data:              #-->
+<!-- ## NAME,RESULT,DESCR = row       #-->
+      <tr>
+        <td style="border-bottom: 1px solid #E0E0E0; text-align: right; vertical-align: middle;"><img src="{ROOT}{NAME}.png"></td>
+        <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top; font-family: monospace;">{RESULT}</td> 
+        <td style="border-bottom: 1px solid #E0E0E0; text-align: left; vertical-align: top;">{DESCR}</td>
+      </tr>
+<!--###-->
+    </table>
+<!--###-->
+
+
+Scalars
+-------
+
+<!--## print_table(fc_basic) #-->
+
+Special Cases
+-------------
+
+<!--## print_table(fc_special) #-->
+
+Containers
+----------
+
+<!--## print_table(fc_cont) #-->
+
