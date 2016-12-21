@@ -3,6 +3,8 @@ lv_string_utils
 
 LabVIEW utilities for processing strings. Especially recommended to programmers who are familiar with Python.
 
+`Introduction <http://krason.biz/blog/lv%20string%20utils.py.html/>`_
+
 `Documentation <http://lv_string_utils.readthedocs.io/>`_
 
 `Source code <https://github.com/gergelyk/lv_string_utils/>`_
@@ -12,7 +14,7 @@ Requirements
 
 * OpenG String Library (available through VI Package Manager).
 * LabVIEW 2015 (downgrade to older versions potentially possible).
-* `lv_test_utils <https://github.com/gergelyk/lv_test_utils/>`_ 1.0.0 <= version < 2.0.0 (only for running unit tests).
+* `lv_test_utils <https://github.com/gergelyk/lv_test_utils/>`_ >= 1.0.0, < 2.0.0 (only for running unit tests).
 
 Installation
 ------------
