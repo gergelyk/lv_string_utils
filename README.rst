@@ -3,7 +3,7 @@ lv_string_utils
 
 LabVIEW utilities for processing strings. Especially recommended to programmers who are familiar with Python.
 
-`Introduction <http://krason.me/blog/lv%20string%20utils.py.html>`_
+`Introduction <http://krason.me/blog/lv%20string%20utils.html>`_
 
 `Documentation <http://lv_string_utils.readthedocs.io/>`_
 
